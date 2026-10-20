@@ -1,0 +1,6 @@
+{
+  "name": "E-Waste & Environmental Management e-Portfolio",
+  "description": "Transforming E-Waste into Environmental Awareness. An interactive college e-portfolio and educational gaming gateway.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

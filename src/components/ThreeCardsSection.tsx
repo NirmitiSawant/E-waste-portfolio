@@ -4,11 +4,11 @@ import { ExternalLink, BookOpen, Archive, Search, CheckCircle2 } from 'lucide-re
 import { PORTFOLIO_CONFIG, isUrlConfigured } from '../config/portfolioLinks';
 import { PendingLinkModal } from './PendingLinkModal';
 
-// High-Fidelity Domain Illustrations generated for each card
+// High-Fidelity Domain Illustrations stored in public/images/
 const CARD_IMAGES = {
-  portfolio: "/src/assets/images/card_portfolio_illustration_1792506009021.jpg",
-  drawer: "/src/assets/images/card_drawer_illustration_1792506010639.jpg",
-  detective: "/src/assets/images/card_detective_illustration_1792506011387.jpg",
+  portfolio: "/images/portfolio.jpg",
+  drawer: "/images/drawer.jpg",
+  detective: "/images/detective.jpg",
 };
 
 interface CardData {
@@ -31,6 +31,9 @@ interface CardData {
 }
 
 export const ThreeCardsSection: React.FC = () => {
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
+  const [imageLoaded, setImageLoaded] = useState<Record<string, boolean>>({});
+
   const [activeModal, setActiveModal] = useState<{
     isOpen: boolean;
     cardTitle: string;
@@ -192,27 +195,34 @@ export const ThreeCardsSection: React.FC = () => {
                 </p>
 
                 {/* Artwork / Illustration Container with floating effect */}
-                <div className="mt-5 relative aspect-[4/3] rounded-xl overflow-hidden bg-[#FFFDF5] border border-slate-200 shadow-inner">
-                  {/* Floating reacting image */}
-                  <img
-                    src={card.imageSrc}
-                    alt={card.imageAlt}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      (e.target as HTMLElement).style.display = 'none';
-                    }}
-                  />
-
-                  {/* Fallback SVG container behind image */}
-                  <div className="absolute inset-0 -z-10 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[#FFFDF5] to-[#E8F7E8] text-[#2E8B57]">
-                    <Icon className="w-12 h-12 mb-2 opacity-50" />
-                    <span className="text-xs font-semibold">{card.title}</span>
-                  </div>
+                <div className="mt-5 relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-[#F7FAF4] border border-slate-200 shadow-inner">
+                  {!imageErrors[card.id] ? (
+                    <img
+                      src={card.imageSrc}
+                      alt={card.imageAlt}
+                      className={`w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105 ${
+                        imageLoaded[card.id] ? 'opacity-100' : 'opacity-95'
+                      }`}
+                      loading="eager"
+                      decoding="async"
+                      onLoad={() => {
+                        setImageLoaded((prev) => ({ ...prev, [card.id]: true }));
+                      }}
+                      onError={() => {
+                        setImageErrors((prev) => ({ ...prev, [card.id]: true }));
+                      }}
+                    />
+                  ) : (
+                    /* High-fidelity visible fallback if image file fails */
+                    <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#FFFDF5] to-[#E8F7E8] text-[#263D32]">
+                      <Icon className="w-12 h-12 mb-3 text-[#2E8B57]" />
+                      <span className="text-sm font-bold text-[#263D32]">{card.title}</span>
+                      <span className="text-xs text-[#647568] mt-1 text-center max-w-xs">{card.description}</span>
+                    </div>
+                  )}
 
                   {/* Subtle botanical border vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-50 pointer-events-none" />
                 </div>
               </div>
 

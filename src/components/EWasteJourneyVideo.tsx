@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 // Path to high-res poster fallback generated for the journey
-const POSTER_IMAGE_PATH = "/src/assets/images/hero_ewaste_poster_1792506010680.jpg";
+const POSTER_IMAGE_PATH = "/images/hero_ewaste_poster.jpg";
 
 interface SceneInfo {
   id: number;
